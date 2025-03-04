@@ -1,3 +1,4 @@
 /.vscode
-/nodo/node_modules
-/servidor/node_modules
+/borda/node_modules
+/dispositivo/node_modules
+/nuvem/node_modules
