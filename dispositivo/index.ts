@@ -16,6 +16,12 @@ cliente.on('connect', () => {
     console.log('Conectado ao broker MQTT na borda');
     // eu assino o tópico de controle
     cliente.subscribe('control/#', console.log); 
+    // publica a mensagem inicial dos atuadores
+    console.log(`Publicando mensagem inicial dos atuadores: presença: ${atuador_presença}, fumaça: ${atuador_fumaça}, gas: ${atuador_gas}`);
+    cliente.publish(`atuadores/${idDispositivo}`, JSON.stringify({ atuador:'presença', valor:atuador_presença }));
+    cliente.publish(`atuadores/${idDispositivo}`, JSON.stringify({ atuador:'fumaça', valor:atuador_fumaça }));
+    cliente.publish(`atuadores/${idDispositivo}`, JSON.stringify({ atuador:'gas', valor:atuador_gas }));
+    
 
     // cada 30 segundos
     setInterval(() => {

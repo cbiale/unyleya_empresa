@@ -47,14 +47,14 @@ db.prepare(`CREATE TABLE IF NOT EXISTS sensores (
     data DATE, 
     presença INTEGER, 
     fumaça INTEGER, 
-    gas INTEGER)").run();`);
+    gas INTEGER)`).run();
 // criar tabela atuadores se não existir
 db.prepare(`CREATE TABLE IF NOT EXISTS atuadores (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     dispositivo INTEGER,
     data DATE, 
     atuador STRING, 
-    valor INTEGER)").run();`);
+    valor INTEGER)`).run();
 // eu defino rotas
 // de prova
 app.get('/', (req, res) => {
@@ -83,9 +83,13 @@ app.get("/atuadores/:id", (req, res) => {
 // rota para obter o último estado de cada tipo de atuador do dispositivo {por ID de dispositivo}
 app.get("/atuadores/:id/ultimo", (req, res) => {
     const { id } = req.params;
-    const atuadores = db.prepare(`SELECT * FROM atuadores 
-            WHERE dispositivo = ? 
-            AND data = (SELECT MAX(data) FROM atuadores WHERE dispositivo = ? AND atuador = atuadores.atuador)`).all(id, id);
+    const atuadores = db.prepare(`
+        SELECT datos.atuador, a.data, a.valor FROM
+        (SELECT atuador, MAX(data) maximo FROM atuadores 
+            WHERE dispositivo = ?
+        GROUP BY atuador) datos,
+        atuadores a
+        WHERE a.dispositivo = ? AND a.atuador = datos.atuador AND a.data = datos.maximo`).all(id, id);
     res.json(atuadores.length ? atuadores : { message: "Nenhum dado encontrado para este dispositivo." });
 });
 // ao conectar-se ao broker na borda
@@ -104,8 +108,8 @@ cliente.on('message', (topico, mensagem) => {
         // converter para o formato JSON
         let dados = JSON.parse(mensagem.toString());
         // guardar em banco de dados
-        const stmt = db.prepare("INSERT INTO sensores (dispositivo, presença, fumaça, gas) VALUES (?, ?, ?, ?)");
-        stmt.run(idDispositivo, dados.presença, dados.fumaça, dados.gas);
+        const stmt = db.prepare("INSERT INTO sensores (dispositivo, data, presença, fumaça, gas) VALUES (?, ?, ?, ?, ?)");
+        stmt.run(idDispositivo, dados.data, dados.presença, dados.fumaça, dados.gas);
     }
     // controle topico atuadores
     if (topico.indexOf('atuadores') !== -1) {
@@ -113,7 +117,7 @@ cliente.on('message', (topico, mensagem) => {
         // converter para o formato JSON
         let dados = JSON.parse(mensagem.toString());
         // guardar em banco de dados
-        const stmt = db.prepare(`INSERT INTO atuadores (dispositivo, data, atuador, valor) VALUES (?, ?, ?)`);
+        const stmt = db.prepare(`INSERT INTO atuadores (dispositivo, data, atuador, valor) VALUES (?, ?, ?, ?)`);
         stmt.run(idDispositivo, dados.data, dados.atuador, dados.valor);
     }
 });

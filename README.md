@@ -12,9 +12,9 @@ No diretório `dispositivo` há uma aplicação implementada em TypeScript que p
 No diretório `borda` há uma aplicação desenvolvida em Typescript que define um servidor de borda que possui um sistema de regras que gerencia os atuadores dos dispositivos e envia os dados para a nuvem. Para fazer isso, ele escuta os tópicos `sensores/#` e `atuadores/id` e se conecta a dois brokers, um localizado na borda e o outro na nuvem. Quando os dados chegam sobre os tópicos, eles são encaminhados para o servidor em nuvem para armazenamento dos dados.
 
 No diretório `nuvem` há uma aplicação desenvolvida em Typescript que define um servidor de nuvem que permite obter o status dos dispositivos e armazena os dados recebidos dos nós na borda. Para isso, foi implementado um servidor usando Express que escuta na porta 3000. O servidor se conecta a um broker MQTT na nuvem e assina os tópicos `sensores/#` e `atuadores/id`. Quando recebe dados publicados nesses tópicos, ele os armazena em um banco de dados sqlite. Os pontos finais da aplicação são:
-- `/sensores/:id`: Obtém medições dos sensores do dispositivo.
-- `/sensores/:id/ultimo`: Obtém o último estado dos sensores do dispositivo.
-- `/atuadores/:id`: Obtém estados dos atuadores do dispositivo.
+- `/sensores/:id`: Obtém o histórico de medição dos sensores do dispositivo.
+- `/sensores/:id/ultimo`: Obtém a última medição dos sensores do dispositivo..
+- `/atuadores/:id`: Obtém o histórico de estados dos atuadores do dispositivo.
 - `/atuadores/:id/ultimo`: Obtém o último estado dos atuadores do dispositivo.
 
 O arquivo `start_broker.sh` inicia os contêineres EMQX correspondentes aos brokers de nuvem e de borda.

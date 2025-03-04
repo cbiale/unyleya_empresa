@@ -24,6 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mqtt = __importStar(require("mqtt"));
+// conexão com o broker MQTT na borda
 const cliente = mqtt.connect('mqtt://localhost:1883');
 // argumento de linha de comando do id do dispositivo
 const idDispositivo = parseInt(process.argv[2]);
@@ -31,10 +32,16 @@ const idDispositivo = parseInt(process.argv[2]);
 let atuador_presença = 0;
 let atuador_gas = 0;
 let atuador_fumaça = 0;
+// ao conectar-se ao broker na borda
 cliente.on('connect', () => {
     console.log('Conectado ao broker MQTT na borda');
     // eu assino o tópico de controle
     cliente.subscribe('control/#', console.log);
+    // publica a mensagem inicial dos atuadores
+    console.log(`Publicando mensagem inicial dos atuadores: presença: ${atuador_presença}, fumaça: ${atuador_fumaça}, gas: ${atuador_gas}`);
+    cliente.publish(`atuadores/${idDispositivo}`, JSON.stringify({ atuador: 'presença', valor: atuador_presença }));
+    cliente.publish(`atuadores/${idDispositivo}`, JSON.stringify({ atuador: 'fumaça', valor: atuador_fumaça }));
+    cliente.publish(`atuadores/${idDispositivo}`, JSON.stringify({ atuador: 'gas', valor: atuador_gas }));
     // cada 30 segundos
     setInterval(() => {
         // valor aleatório para enviar do sensor de presença (0 ausência, 1 presença)
