@@ -1,9 +1,11 @@
 # Redes e protocolos de comunicação para IoT
-## Curso de Pós-Graduação Lato Sensu em Agricultura Digital
-## Facultade Unyleya
+### Curso de Pós-Graduação Lato Sensu em Agricultura Digital
+### Facultade Unyleya
 
 ### Professor Conteudista: Jorge Umberto Scatolin Marques
 ### Estudante: Claudio Omar Biale
+
+### Aplicações
 
 No diretório `dispositivo` há uma aplicação implementada em TypeScript que publica o status dos sensores usando o tópico `sensores/id` onde `id` corresponde ao identificador que representa o dispositivo no sistema. Por outro lado, ele escuta no tópico `control/id` para receber mudanças em seus atuadores de acordo com o mecanismo de regras do nó de borda. Se mudanças ocorrerem em qualquer atuador, ele as publica no tópico `atuadores/id`.
 
@@ -16,3 +18,27 @@ No diretório `nuvem` há uma aplicação desenvolvida em Typescript que define 
 - `/atuadores/:id/ultimo`: Obtém o último estado dos atuadores do dispositivo.
 
 O arquivo `start_broker.sh` inicia os contêineres EMQX correspondentes aos brokers de nuvem e de borda.
+
+### Exemplo de uso
+
+Execute brokers MQTT:
+
+```bash
+./start_broker.sh
+```
+Iniciar servidor de nuvem e servidor de borda:
+
+No diretório `nuvem` e `borda` execute:
+
+```bash
+npm run start
+```
+
+Iniciar dispositivo com id igual a 1:
+
+No diretório `dispositivo` execute:
+```bash
+npm run start 1
+```
+
+
