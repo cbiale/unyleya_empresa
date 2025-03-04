@@ -28,7 +28,6 @@ Execute brokers MQTT:
 ```
 
 Instale as dependências para cada aplicativo, isso inclui instalar os pacotes de desenvolvimento.
-```
 
 Para iniciar servidor de nuvem e servidor de borda no diretório `nuvem` e `borda` execute:
 
