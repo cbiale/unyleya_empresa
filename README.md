@@ -1,9 +1,9 @@
 # Redes e protocolos de comunicação para IoT
-### Curso de Pós-Graduação Lato Sensu em Agricultura Digital
-### Facultade Unyleya
+#### Curso de Pós-Graduação Lato Sensu em Agricultura Digital
+#### Facultade Unyleya
 
-### Professor Conteudista: Jorge Umberto Scatolin Marques
-### Estudante: Claudio Omar Biale
+#### Professor Conteudista: Jorge Umberto Scatolin Marques
+#### Estudante: Claudio Omar Biale
 
 ### Aplicações
 
@@ -26,17 +26,18 @@ Execute brokers MQTT:
 ```bash
 ./start_broker.sh
 ```
-Iniciar servidor de nuvem e servidor de borda:
 
-No diretório `nuvem` e `borda` execute:
+Instale as dependências para cada aplicativo, isso inclui instalar os pacotes de desenvolvimento.
+```
+
+Para iniciar servidor de nuvem e servidor de borda no diretório `nuvem` e `borda` execute:
 
 ```bash
 npm run start
 ```
 
-Iniciar dispositivo com id igual a 1:
+Para iniciar dispositivo com id igual a 1 no diretório `dispositivo` execute:
 
-No diretório `dispositivo` execute:
 ```bash
 npm run start 1
 ```
